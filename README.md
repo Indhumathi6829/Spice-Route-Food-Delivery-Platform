@@ -1,6 +1,6 @@
 # 🌶️ SpiceRoute Kitchen — AI Revenue Recovery System
 
-> **An AI-powered revenue recovery system built on top of a full-stack food delivery platform, designed for the Razorpay AI Buildathon — Track 3: AI Revenue Recovery.**
+> **An AI-powered revenue recovery system built on top of a full-stack food delivery platform**
 
 SpiceRoute Kitchen is a complete food delivery platform enhanced with an **AI Revenue Recovery System** that detects failed payments, analyzes the likelihood of recovery, chooses the most suitable recovery strategy, guides the customer through recovery, verifies the payment securely, and provides administrators with a complete recovery dashboard and audit trail.
 
