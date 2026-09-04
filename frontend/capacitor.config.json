@@ -1,0 +1,19 @@
+{
+  "appId": "com.foodexpress.app",
+  "appName": "FoodExpress",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https",
+    "cleartext": true
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 2000,
+      "backgroundColor": "#0F0F0F"
+    },
+    "StatusBar": {
+      "style": "DARK",
+      "backgroundColor": "#0F0F0F"
+    }
+  }
+}

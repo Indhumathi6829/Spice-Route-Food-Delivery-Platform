@@ -1,0 +1,45 @@
+# Environment
+.env
+*.env.local
+
+# Firebase service account — NEVER commit this
+firebase/firebase-service-account.json
+firebase/*.json
+
+# Java
+target/
+*.class
+*.jar
+*.war
+*.ear
+*.log
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Node
+node_modules/
+dist/
+build/
+.cache/
+*.tsbuildinfo
+.eslintcache
+
+# IDE
+.idea/
+.vscode/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+Thumbs.db
+
+# Mobile
+.expo/
+android/
+ios/
+*.keystore
+
+# Misc
+*.tmp
+*.swp
+*.swo

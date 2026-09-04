@@ -1,0 +1,78 @@
+version: "3.9"
+
+services:
+
+  mysql:
+    image: mysql:8.0
+    container_name: spiceroute-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-spiceroute}
+      MYSQL_DATABASE: spiceroute
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: spiceroute-backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/spiceroute?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ${MYSQL_ROOT_PASSWORD:-spiceroute}
+      JWT_SECRET: ${JWT_SECRET:-spiceroute-super-secret-key-change-in-production-2024}
+      RAZORPAY_KEY_ID: ${RAZORPAY_KEY_ID:-rzp_test_placeholder}
+      RAZORPAY_KEY_SECRET: ${RAZORPAY_KEY_SECRET:-placeholder_secret}
+      CLOUDINARY_CLOUD_NAME: ${CLOUDINARY_CLOUD_NAME:-spiceroute}
+      CLOUDINARY_API_KEY: ${CLOUDINARY_API_KEY:-placeholder}
+      CLOUDINARY_API_SECRET: ${CLOUDINARY_API_SECRET:-placeholder}
+      FIREBASE_ENABLED: ${FIREBASE_ENABLED:-false}
+      # When FIREBASE_ENABLED=true, place your firebase-service-account.json
+      # in ./firebase/ and set FIREBASE_CREDENTIALS_PATH=/app/firebase/firebase-service-account.json
+      FIREBASE_CREDENTIALS_PATH: ${FIREBASE_CREDENTIALS_PATH:-/app/firebase/firebase-service-account.json}
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-your_google_maps_api_key}
+      # Admin self-registration code — leave blank to disable public admin signup
+      ADMIN_REGISTRATION_CODE: ${ADMIN_REGISTRATION_CODE:-__DISABLED__}
+      # ── AI Revenue Recovery ───────────────────────────────────────────────
+      # Set AI_API_KEY to your OpenAI key to enable LLM explanations.
+      # Leave blank — recovery agent still works with rule-based explanations.
+      AI_API_KEY: ${AI_API_KEY:-}
+      AI_MODEL: ${AI_MODEL:-gpt-4o-mini}
+      AI_ENABLED: ${AI_ENABLED:-false}
+      RECOVERY_MAX_ATTEMPTS: ${RECOVERY_MAX_ATTEMPTS:-3}
+      RECOVERY_EXPIRY_HOURS: ${RECOVERY_EXPIRY_HOURS:-24}
+    volumes:
+      # Mount the ./firebase directory so the service account JSON is
+      # accessible inside the container at /app/firebase/
+      # If you haven't set up Firebase yet, this directory will be empty
+      # and Firebase will stay disabled — no error is thrown.
+      - ./firebase:/app/firebase:ro
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: spiceroute-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

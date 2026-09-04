@@ -1,0 +1,19 @@
+{
+  "name": "FoodExpress",
+  "short_name": "FoodExpress",
+  "description": "Order food with real-time delivery tracking",
+  "theme_color": "#FF5722",
+  "background_color": "#0F0F0F",
+  "display": "standalone",
+  "orientation": "portrait",
+  "scope": "/",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/vite.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
